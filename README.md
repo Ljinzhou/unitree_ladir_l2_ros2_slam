@@ -1,3 +1,5 @@
+# Readme文件有AI自动生成，执行命令时需注意！！！
+
 # Unitree LiDAR L2 ROS2 SLAM
 
 这个仓库包含了Unitree LiDAR L2的完整ROS2 SLAM解决方案，集成了Point-LiO进行实时建图和定位。
