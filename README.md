@@ -1,4 +1,4 @@
-# Readme文件有AI自动生成，执行命令时需注意！！！
+# Readme文件由AI自动生成，执行命令时需注意！！！
 
 # Unitree LiDAR L2 ROS2 SLAM
 
