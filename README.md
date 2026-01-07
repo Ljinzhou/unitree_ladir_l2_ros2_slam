@@ -19,6 +19,22 @@
 
 ### 1. 安装ROS2 Humble
 
+使用FishROS一键安装脚本（推荐）：
+
+```bash
+# 下载并运行FishROS安装脚本
+wget http://fishros.com/install -O fishros && . fishros
+```
+
+然后选择：
+1. 选择 `1` - 一键安装ROS
+2. 选择 `2` - ROS2
+3. 选择 `1` - humble(推荐)
+4. 选择 `1` - Desktop-Full(推荐)
+5. 等待安装完成
+
+**或者手动安装：**
+
 ```bash
 # 添加ROS2 apt仓库
 sudo apt update && sudo apt install curl gnupg lsb-release
@@ -339,17 +355,3 @@ def generate_launch_description():
 - [Point-LiO](https://github.com/hku-mars/Point-LiO) 团队提供SLAM算法
 - [LycanW](https://github.com/LycanW/Point-LiO-ROS2-Unilidar) 提供Point-LiO的ROS2移植
 - ROS2社区提供机器人框架
-
-## 支持
-
-如有问题和疑问:
-1. 查看上面的故障排除部分
-2. 搜索现有的GitHub问题
-3. 创建新问题并提供详细信息:
-   - 系统规格
-   - 错误消息
-   - 重现步骤
-
----
-
-**祝建图愉快! 🗺️🤖**
