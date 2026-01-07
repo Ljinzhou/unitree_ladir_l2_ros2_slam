@@ -1,40 +1,40 @@
 # Unitree LiDAR L2 ROS2 SLAM
 
-This repository contains a complete ROS2 SLAM solution for the Unitree LiDAR L2, integrating Point-LiO for real-time mapping and localization.
+这个仓库包含了Unitree LiDAR L2的完整ROS2 SLAM解决方案，集成了Point-LiO进行实时建图和定位。
 
-## Overview
+## 项目概述
 
-This project provides:
-- **Unitree LiDAR L2 ROS2 driver** - Real-time point cloud and IMU data publishing
-- **Point-LiO SLAM** - State-of-the-art LiDAR-Inertial Odometry for mapping
-- **Complete workspace** - Ready-to-use ROS2 workspace with all dependencies
+本项目提供：
+- **Unitree LiDAR L2 ROS2驱动** - 实时点云和IMU数据发布
+- **Point-LiO SLAM** - 先进的激光雷达-惯性里程计用于建图
+- **完整工作空间** - 包含所有依赖的即用型ROS2工作空间
 
-## Hardware Requirements
+## 硬件要求
 
-- **Unitree LiDAR L2** - 360° LiDAR with integrated IMU
-- **Ubuntu 22.04** - Recommended OS
-- **ROS2 Humble** - Required ROS2 distribution
+- **Unitree LiDAR L2** - 360°激光雷达，集成IMU
+- **Ubuntu 22.04** - 推荐操作系统
+- **ROS2 Humble** - 必需的ROS2发行版
 
-## System Dependencies
+## 系统依赖
 
-### 1. Install ROS2 Humble
+### 1. 安装ROS2 Humble
 
 ```bash
-# Add ROS2 apt repository
+# 添加ROS2 apt仓库
 sudo apt update && sudo apt install curl gnupg lsb-release
 sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
 sudo sh -c 'echo "deb [arch=$(dpkg --print-architecture)] http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" > /etc/apt/sources.list.d/ros2-latest.list'
 
-# Install ROS2 Humble
+# 安装ROS2 Humble
 sudo apt update
 sudo apt install ros-humble-desktop-full
 
-# Setup environment
+# 设置环境
 echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
 source ~/.bashrc
 ```
 
-### 2. Install Build Tools
+### 2. 安装构建工具
 
 ```bash
 sudo apt install python3-colcon-common-extensions python3-rosdep
@@ -42,270 +42,270 @@ sudo rosdep init
 rosdep update
 ```
 
-### 3. Install Required Libraries
+### 3. 安装必需库
 
 ```bash
-# PCL and related libraries
+# PCL和相关库
 sudo apt install libpcl-dev pcl-tools
 
-# Boost libraries
+# Boost库
 sudo apt install libboost-all-dev
 
 # Eigen3
 sudo apt install libeigen3-dev
 
-# Other dependencies
+# 其他依赖
 sudo apt install libyaml-cpp-dev libgtest-dev
 ```
 
-## Installation
+## 安装
 
-### 1. Clone the Repository
+### 1. 克隆仓库
 
 ```bash
-git clone git@github.com:Ljinzhou/unitree_ladir_l2_ros2_slam.git
+git clone https://github.com/Ljinzhou/unitree_ladir_l2_ros2_slam.git
 cd unitree_ladir_l2_ros2_slam
 ```
 
-### 2. Install Dependencies
+### 2. 安装依赖
 
 ```bash
-# Install ROS2 dependencies
+# 安装ROS2依赖
 rosdep install --from-paths src --ignore-src -r -y
 ```
 
-### 3. Build the Workspace
+### 3. 构建工作空间
 
 ```bash
-# Build all packages
+# 构建所有包
 colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
 
-# Source the workspace
+# 设置工作空间环境
 source install/setup.bash
 ```
 
-## Hardware Setup
+## 硬件设置
 
-### 1. Connect Unitree LiDAR L2
+### 1. 连接Unitree LiDAR L2
 
-- Connect the LiDAR to your computer via USB
-- The device should appear as `/dev/ttyACM0`
-- Verify connection:
+- 通过USB将激光雷达连接到计算机
+- 设备应显示为`/dev/ttyACM0`
+- 验证连接：
 
 ```bash
 ls -la /dev/ttyACM*
-# Should show: crw-rw-rw- 1 root dialout 166, 0 [date] /dev/ttyACM0
+# 应显示: crw-rw-rw- 1 root dialout 166, 0 [日期] /dev/ttyACM0
 ```
 
-### 2. Set Permissions (if needed)
+### 2. 设置权限（如需要）
 
 ```bash
 sudo chmod 666 /dev/ttyACM0
-# Or add your user to dialout group:
+# 或将用户添加到dialout组:
 sudo usermod -a -G dialout $USER
-# Then logout and login again
+# 然后注销并重新登录
 ```
 
-## Usage
+## 使用方法
 
-### Quick Start - Complete SLAM System
+### 快速开始 - 完整SLAM系统
 
 ```bash
-# Terminal 1: Launch LiDAR driver
+# 终端1: 启动激光雷达驱动
 source install/setup.bash
 ros2 launch unitree_lidar_ros2 node_only.py
 
-# Terminal 2: Launch Point-LiO SLAM with RViz
+# 终端2: 启动Point-LiO SLAM和RViz
 source install/setup.bash
 ros2 launch point_lio mapping_unilidar_l2.launch.py
 ```
 
-### Step-by-Step Launch
+### 分步启动
 
-#### 1. Launch LiDAR Driver Only
+#### 1. 仅启动激光雷达驱动
 
 ```bash
 source install/setup.bash
 ros2 launch unitree_lidar_ros2 node_only.py
 ```
 
-**Expected output:**
+**预期输出:**
 ```
 initialize_type_ = 1
-[INFO] [timestamp] [unitree_lidar_ros2_node]: LiDAR initialized successfully
+[INFO] [时间戳] [unitree_lidar_ros2_node]: LiDAR初始化成功
 ```
 
-#### 2. Verify LiDAR Data
+#### 2. 验证激光雷达数据
 
 ```bash
-# Check topics
+# 检查话题
 ros2 topic list
-# Should show:
+# 应显示:
 # /unilidar/cloud
 # /unilidar/imu
 
-# Check point cloud frequency
+# 检查点云频率
 ros2 topic hz /unilidar/cloud
-# Should show ~18 Hz
+# 应显示 ~18 Hz
 
-# Check IMU frequency  
+# 检查IMU频率  
 ros2 topic hz /unilidar/imu
-# Should show ~250 Hz
+# 应显示 ~250 Hz
 ```
 
-#### 3. Launch SLAM
+#### 3. 启动SLAM
 
 ```bash
-# Option A: With RViz visualization
+# 选项A: 带RViz可视化
 ros2 launch point_lio mapping_unilidar_l2.launch.py
 
-# Option B: SLAM node only
+# 选项B: 仅SLAM节点
 ros2 run point_lio pointlio_mapping --ros-args --params-file src/Point-LiO-ROS2-Unilidar/src/point_lio/config/unilidar_l2.yaml
 
-# Option C: LiDAR-only SLAM (if IMU is unstable)
+# 选项C: 仅激光雷达SLAM（如果IMU不稳定）
 ros2 run point_lio pointlio_mapping --ros-args --params-file src/Point-LiO-ROS2-Unilidar/src/point_lio/config/unilidar_l2_lidar_only.yaml
 ```
 
-#### 4. Launch RViz Separately (if needed)
+#### 4. 单独启动RViz（如需要）
 
 ```bash
 ros2 run rviz2 rviz2 -d src/Point-LiO-ROS2-Unilidar/src/point_lio/rviz_cfg/loam_livox.rviz
 ```
 
-## Configuration
+## 配置
 
-### LiDAR Driver Parameters
+### 激光雷达驱动参数
 
-Edit `src/unitree_lidar_ros2/src/unitree_lidar_ros2/launch/node_only.py`:
+编辑 `src/unitree_lidar_ros2/src/unitree_lidar_ros2/launch/node_only.py`:
 
 ```python
 parameters= [
-    {'initialize_type': 1},        # 1=Serial, 2=UDP
-    {'work_mode': 8},              # LiDAR work mode
-    {'serial_port': '/dev/ttyACM0'}, # Serial port
-    {'baudrate': 4000000},         # Baud rate
-    {'cloud_frame': "unilidar_lidar"}, # Point cloud frame
-    {'cloud_topic': "unilidar/cloud"}, # Point cloud topic
-    {'imu_frame': "unilidar_imu"},     # IMU frame
-    {'imu_topic': "unilidar/imu"},     # IMU topic
+    {'initialize_type': 1},        # 1=串口, 2=UDP
+    {'work_mode': 8},              # 激光雷达工作模式
+    {'serial_port': '/dev/ttyACM0'}, # 串口
+    {'baudrate': 4000000},         # 波特率
+    {'cloud_frame': "unilidar_lidar"}, # 点云坐标系
+    {'cloud_topic': "unilidar/cloud"}, # 点云话题
+    {'imu_frame': "unilidar_imu"},     # IMU坐标系
+    {'imu_topic': "unilidar/imu"},     # IMU话题
 ]
 ```
 
-### SLAM Parameters
+### SLAM参数
 
-Edit `src/Point-LiO-ROS2-Unilidar/src/point_lio/config/unilidar_l2.yaml`:
+编辑 `src/Point-LiO-ROS2-Unilidar/src/point_lio/config/unilidar_l2.yaml`:
 
-**Key parameters for tuning:**
-- `imu_en: true/false` - Enable/disable IMU
-- `extrinsic_est_en: true/false` - Enable automatic extrinsic calibration
-- `lidar_meas_cov: 0.1` - LiDAR measurement covariance
-- `det_range: 50.0` - Detection range (meters)
-- `filter_size_surf: 0.2` - Surface filtering size
-- `filter_size_map: 0.2` - Map filtering size
+**调优关键参数:**
+- `imu_en: true/false` - 启用/禁用IMU
+- `extrinsic_est_en: true/false` - 启用自动外参标定
+- `lidar_meas_cov: 0.1` - 激光雷达测量协方差
+- `det_range: 50.0` - 检测范围（米）
+- `filter_size_surf: 0.2` - 表面滤波尺寸
+- `filter_size_map: 0.2` - 地图滤波尺寸
 
-## Troubleshooting
+## 故障排除
 
-### 1. LiDAR Connection Issues
+### 1. 激光雷达连接问题
 
-**Problem:** `initialize_type_ = 1` but no data
+**问题:** `initialize_type_ = 1` 但无数据
 ```bash
-# Check device permissions
+# 检查设备权限
 ls -la /dev/ttyACM0
 
-# Check if device is in use
+# 检查设备是否被占用
 sudo lsof /dev/ttyACM0
 
-# Try different port
+# 尝试不同端口
 ls /dev/tty*
 ```
 
-### 2. SLAM Instability
+### 2. SLAM不稳定
 
-**Symptoms:** Map "flies away" or becomes chaotic
+**症状:** 地图"飞走"或变得混乱
 
-**Solutions:**
-1. **Use LiDAR-only mode:**
+**解决方案:**
+1. **使用仅激光雷达模式:**
    ```bash
    ros2 run point_lio pointlio_mapping --ros-args --params-file src/Point-LiO-ROS2-Unilidar/src/point_lio/config/unilidar_l2_lidar_only.yaml
    ```
 
-2. **Increase covariance values** in `unilidar_l2.yaml`:
+2. **增加协方差值** 在 `unilidar_l2.yaml` 中:
    ```yaml
-   lidar_meas_cov: 0.5  # Increase from 0.1
-   imu_meas_acc_cov: 2.0  # Increase from 1.0
-   imu_meas_omg_cov: 2.0  # Increase from 1.0
+   lidar_meas_cov: 0.5  # 从0.1增加
+   imu_meas_acc_cov: 2.0  # 从1.0增加
+   imu_meas_omg_cov: 2.0  # 从1.0增加
    ```
 
-3. **Enable extrinsic estimation:**
+3. **启用外参估计:**
    ```yaml
    extrinsic_est_en: true
    ```
 
-### 3. RViz Display Issues
+### 3. RViz显示问题
 
-**Problem:** "Fixed Frame [odom] does not exist"
+**问题:** "固定坐标系 [odom] 不存在"
 
-**Solution:** Wait for SLAM initialization (should see "IMU Initializing: 100.0%")
+**解决方案:** 等待SLAM初始化（应看到"IMU初始化: 100.0%"）
 
-**Problem:** No point clouds visible
+**问题:** 看不到点云
 
-**Solutions:**
-1. Check topic names in RViz match published topics
-2. Verify Fixed Frame is set to "odom"
-3. Check point cloud topic: `/cloud_registered`
+**解决方案:**
+1. 检查RViz中的话题名称是否匹配发布的话题
+2. 验证固定坐标系设置为"odom"
+3. 检查点云话题: `/cloud_registered`
 
-### 4. Build Errors
+### 4. 构建错误
 
-**Boost linking error:**
+**Boost链接错误:**
 ```bash
-# Install missing Boost libraries
+# 安装缺失的Boost库
 sudo apt install libboost-date-time-dev libboost-system-dev libboost-filesystem-dev
 ```
 
-**PCL version conflicts:**
+**PCL版本冲突:**
 ```bash
-# Remove conflicting PCL versions
+# 移除冲突的PCL版本
 sudo apt remove libpcl-*
 sudo apt install libpcl-dev
 ```
 
-## Topics and Services
+## 话题和服务
 
-### Published Topics
+### 发布的话题
 
-| Topic | Type | Description |
+| 话题 | 类型 | 描述 |
 |-------|------|-------------|
-| `/unilidar/cloud` | `sensor_msgs/PointCloud2` | Raw point cloud data |
-| `/unilidar/imu` | `sensor_msgs/Imu` | IMU data |
-| `/cloud_registered` | `sensor_msgs/PointCloud2` | Registered point cloud |
-| `/Laser_map` | `sensor_msgs/PointCloud2` | Global map |
-| `/Odometry` | `nav_msgs/Odometry` | Robot odometry |
-| `/path` | `nav_msgs/Path` | Robot trajectory |
-| `/tf` | `tf2_msgs/TFMessage` | Transform tree |
+| `/unilidar/cloud` | `sensor_msgs/PointCloud2` | 原始点云数据 |
+| `/unilidar/imu` | `sensor_msgs/Imu` | IMU数据 |
+| `/cloud_registered` | `sensor_msgs/PointCloud2` | 配准点云 |
+| `/Laser_map` | `sensor_msgs/PointCloud2` | 全局地图 |
+| `/Odometry` | `nav_msgs/Odometry` | 机器人里程计 |
+| `/path` | `nav_msgs/Path` | 机器人轨迹 |
+| `/tf` | `tf2_msgs/TFMessage` | 变换树 |
 
-### Key Frames
+### 关键坐标系
 
-- `odom` - World/map frame
-- `imu_link` - IMU body frame  
-- `unilidar_lidar` - LiDAR frame
-- `unilidar_imu` - IMU frame
+- `odom` - 世界/地图坐标系
+- `imu_link` - IMU本体坐标系  
+- `unilidar_lidar` - 激光雷达坐标系
+- `unilidar_imu` - IMU坐标系
 
-## Performance Tips
+## 性能提示
 
-1. **Smooth Motion:** Move slowly and smoothly, especially during initialization
-2. **Rich Environment:** Ensure sufficient geometric features in the environment
-3. **Avoid Pure Rotation:** Mix translation with rotation for better tracking
-4. **Wait for Initialization:** Don't move until "IMU Initializing: 100.0%" appears
+1. **平滑运动:** 缓慢平滑地移动，特别是在初始化期间
+2. **丰富环境:** 确保环境中有足够的几何特征
+3. **避免纯旋转:** 将平移与旋转混合以获得更好的跟踪
+4. **等待初始化:** 在"IMU初始化: 100.0%"出现之前不要移动
 
-## Advanced Usage
+## 高级用法
 
-### Save Point Cloud Map
+### 保存点云地图
 
-Maps are automatically saved as PCD files in the workspace directory when the SLAM node is terminated.
+当SLAM节点终止时，地图会自动保存为工作空间目录中的PCD文件。
 
-### Custom Launch Files
+### 自定义启动文件
 
-Create custom launch files for specific scenarios:
+为特定场景创建自定义启动文件:
 
 ```python
 # custom_mapping.launch.py
@@ -314,41 +314,42 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     return LaunchDescription([
-        # Your custom configuration
+        # 你的自定义配置
     ])
 ```
 
-## Contributing
+## 贡献
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+1. Fork仓库
+2. 创建功能分支
+3. 进行更改
+4. 彻底测试
+5. 提交拉取请求
 
-## License
+## 许可证
 
-This project integrates multiple open-source components:
-- Unitree LiDAR SDK (Unitree License)
-- Point-LiO (BSD License)
-- ROS2 packages (Apache 2.0 License)
+本项目集成了多个开源组件:
+- Unitree LiDAR SDK (Unitree许可证)
+- Point-LiO (BSD许可证) - 来自 [LycanW/Point-LiO-ROS2-Unilidar](https://github.com/LycanW/Point-LiO-ROS2-Unilidar)
+- ROS2包 (Apache 2.0许可证)
 
-## Acknowledgments
+## 致谢
 
-- [Unitree Robotics](https://www.unitree.com/) for the LiDAR hardware and SDK
-- [Point-LiO](https://github.com/hku-mars/Point-LiO) team for the SLAM algorithm
-- ROS2 community for the robotics framework
+- [Unitree Robotics](https://www.unitree.com/) 提供激光雷达硬件和SDK
+- [Point-LiO](https://github.com/hku-mars/Point-LiO) 团队提供SLAM算法
+- [LycanW](https://github.com/LycanW/Point-LiO-ROS2-Unilidar) 提供Point-LiO的ROS2移植
+- ROS2社区提供机器人框架
 
-## Support
+## 支持
 
-For issues and questions:
-1. Check the troubleshooting section above
-2. Search existing GitHub issues
-3. Create a new issue with detailed information:
-   - System specifications
-   - Error messages
-   - Steps to reproduce
+如有问题和疑问:
+1. 查看上面的故障排除部分
+2. 搜索现有的GitHub问题
+3. 创建新问题并提供详细信息:
+   - 系统规格
+   - 错误消息
+   - 重现步骤
 
 ---
 
-**Happy Mapping! 🗺️🤖**
+**祝建图愉快! 🗺️🤖**
